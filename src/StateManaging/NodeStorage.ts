@@ -11,6 +11,14 @@ export function updateNodesList(newNode : Node) {
     })
 }
 
+export function updateNodeSize(nodeId : string, height : number, width : number) : void {
+    storage.get(NODES).map((node) => {
+        if (node.id == nodeId) {
+            node.style = { width : width, height : height }
+        }
+    })
+}
+
 export function updateNodePosition(nodeId : string, xPos : number, yPos : number) : void {
     storage.get(NODES).map((node) => {
         if (node.id == nodeId) {

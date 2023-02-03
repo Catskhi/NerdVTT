@@ -1,17 +1,30 @@
 import { NodeResizer } from "@reactflow/node-resizer";
-import { NodeProps, Handle, Position } from "reactflow";
+import { NodeProps, Handle, Position, Node, useStore } from "reactflow";
 
 import '@reactflow/node-resizer/dist/style.css';
 import { useEffect } from "react";
-import { updateNodePosition } from "../../StateManaging/NodeStorage";
+import { updateNodeSize, updateNodePosition } from "../../StateManaging/NodeStorage";
 
 export function Square({ selected, xPos, yPos, id } : NodeProps) {
+
+    const size = useStore((state) => {
+        const nodeSize = state.nodeInternals.get(id)
+
+        return {
+            height : nodeSize?.height,
+            width : nodeSize?.width
+        }
+    })
+
+    useEffect(() => {
+        if (size.height && size.width) {
+            updateNodeSize(id, size.height, size.width)
+        }
+    }, [size])
 
     useEffect(() => {
         updateNodePosition(id, xPos, yPos)
     }, [xPos, yPos])
-
-    // console.log(xPos + ' ' + yPos)
 
     return (
         <div className="w-full h-full min-w-[50px] min-h-[50px] bg-red-500 rounded-lg">

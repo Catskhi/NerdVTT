@@ -31,6 +31,7 @@ function App() {
             x : 100,
             y : 100
         },
+        style: { height : 100, width : 100 },
         data : {},
       })
       setNodes(storage.get(NODES))
