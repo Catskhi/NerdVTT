@@ -1,6 +1,7 @@
 import { createStore } from "jotai";
 import { Node } from "reactflow";
 import { NODES } from "./Atoms";
+import { addHistoryNodeAction } from "./history/HistoryManager";
 
 export const storage = createStore()
 
@@ -14,7 +15,14 @@ export function updateNodesList(newNode : Node) {
 export function updateNodeSize(nodeId : string, height : number, width : number) : void {
     storage.get(NODES).map((node) => {
         if (node.id == nodeId) {
+            addHistoryNodeAction({
+                usedFunction : 'updateNodeSize', 
+                nodeId : nodeId, 
+                oldValue : { height: node.height, width: node.width }, 
+                newValue : { height: height, width: node.width }
+            })
             node.style = { width : width, height : height }
+            console.log(height + ' ' + width)
         }
     })
 }
