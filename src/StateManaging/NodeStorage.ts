@@ -15,14 +15,7 @@ export function updateNodesList(newNode : Node) {
 export function updateNodeSize(nodeId : string, height : number, width : number) : void {
     storage.get(NODES).map((node) => {
         if (node.id == nodeId) {
-            addHistoryNodeAction({
-                usedFunction : 'updateNodeSize', 
-                nodeId : nodeId, 
-                oldValue : { height: node.height, width: node.width }, 
-                newValue : { height: height, width: node.width }
-            })
             node.style = { width : width, height : height }
-            console.log(height + ' ' + width)
         }
     })
 }
@@ -34,5 +27,3 @@ export function updateNodePosition(nodeId : string, xPos : number, yPos : number
         }
     })
 }
-
-// export function updateNodeSize()

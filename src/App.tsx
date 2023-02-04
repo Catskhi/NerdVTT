@@ -35,18 +35,6 @@ function App() {
         data : {},
       })
       setNodes(storage.get(NODES))
-      // setNodes(nodes => [
-      //   ...nodes, 
-      //   {
-      //     id : crypto.randomUUID(),
-      //     type: 'square',
-      //     position: {
-      //         x : 100,
-      //         y : 100
-      //     },
-      //     data : {},
-      //   }
-      // ])
   }
 
   return (
