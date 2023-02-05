@@ -11,6 +11,8 @@ import { INITIAL_NODES, NODES } from './StateManaging/Atoms';
 import { updateNodesList } from './StateManaging/NodeStorage';
 
 import { storage } from './StateManaging/NodeStorage';
+import { UndoButton } from './components/toolbar/buttons/UndoButton';
+import { useEffect, useState } from 'react';
 
 const NODE_TYPES = {
   square : Square
@@ -21,6 +23,8 @@ function App() {
   const [initialNodes] = useAtom(INITIAL_NODES)
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+
+  const [testNodes, setTest] = useState(storage.get(NODES))
 
   function addNode () : void {
 
@@ -37,6 +41,14 @@ function App() {
       setNodes(storage.get(NODES))
   }
 
+  function updateNodes() {
+    setNodes(storage.get(NODES))
+  }
+
+  useEffect(() => {
+      console.log(storage.get(NODES))
+  }, [storage.get(NODES)])
+
   return (
     <Provider store={storage}>
     <div className='h-screen w-screen'>
@@ -51,6 +63,7 @@ function App() {
         </ReactFlow>
         <Toolbar>
               <SquareButton addNodeFunction={() => addNode} />
+              <UndoButton updateNodesFunction={() => updateNodes()}/>
         </Toolbar>
     </div>
     </Provider>

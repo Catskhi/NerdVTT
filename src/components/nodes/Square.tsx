@@ -52,7 +52,7 @@ export function Square({ selected, xPos, yPos, id } : NodeProps) {
             console.log('New size : ', newSize)
             updateNodeSize(id, newSize.height as number, newSize.width as number)
             addHistoryNodeAction({
-                usedFunction: 'Resize Node', nodeId: id,
+                usedFunction: 'Update Node Size', nodeId: id,
                 oldValue: previousSize,
                 newValue: newSize,
             })
