@@ -13,6 +13,7 @@ import { updateNodesList } from './StateManaging/NodeStorage';
 import { storage } from './StateManaging/NodeStorage';
 import { UndoButton } from './components/toolbar/buttons/UndoButton';
 import { useEffect, useState } from 'react';
+import { RedoButton } from './components/toolbar/buttons/RedoButton';
 
 const NODE_TYPES = {
   square : Square
@@ -64,6 +65,7 @@ function App() {
         <Toolbar>
               <SquareButton addNodeFunction={() => addNode} />
               <UndoButton updateNodesFunction={() => updateNodes()}/>
+              <RedoButton updateNodesFunction={() => updateNodes()}/>
         </Toolbar>
     </div>
     </Provider>

@@ -1,4 +1,4 @@
-import { undoAction } from "../../../StateManaging/history/HistoryManager";
+import { undoAction, verifyIfCanUndo } from "../../../StateManaging/history/HistoryManager";
 
 interface UndoProps {
     updateNodesFunction : Function
@@ -7,8 +7,10 @@ interface UndoProps {
 export function UndoButton({updateNodesFunction} : UndoProps) {
 
     function buttonAction() {
-        undoAction()
-        updateNodesFunction()
+        if (verifyIfCanUndo()) {
+            undoAction()
+            updateNodesFunction()
+        }
     }
 
     return (
