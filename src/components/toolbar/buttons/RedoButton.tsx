@@ -1,4 +1,5 @@
-import { redoAction, verifyIfCanRedo } from "../../../StateManaging/history/HistoryManager"
+
+import { redo } from "../../../StateManaging/history/HistoryManager"
 import { storage } from "../../../StateManaging/NodeStorage"
 
 interface RedoProps {
@@ -7,12 +8,12 @@ interface RedoProps {
 
 export function RedoButton({updateNodesFunction} : RedoProps) {
 
-    async function buttonAction() {
-        if (verifyIfCanRedo()) {
-            redoAction()
-            updateNodesFunction()
-        }
-    }
+    // async function buttonAction() {
+    //     if (verifyIfCanRedo()) {
+    //         redoAction()
+    //         updateNodesFunction()
+    //     }
+    // }
 
     return (
         <button className='h-10 px-3 ml-3
@@ -22,7 +23,7 @@ export function RedoButton({updateNodesFunction} : RedoProps) {
             active:bg-blue-700
             transition-all duration-300
         '
-        onClick={() => buttonAction()}
+        onClick={() => redo()}
         >
             <i className="bi bi-arrow-clockwise"></i>
         </button>

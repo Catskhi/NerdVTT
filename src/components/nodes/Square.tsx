@@ -48,8 +48,6 @@ export function Square({ selected, xPos, yPos, id } : NodeProps) {
             if (previousSize?.height == newSize?.height && previousSize.width == newSize.width) {
                     return
             }
-            console.log('Previous size : ', previousSize)
-            console.log('New size : ', newSize)
             updateNodeSize(id, newSize.height as number, newSize.width as number)
             addHistoryNodeAction({
                 usedFunction: 'Update Node Size', nodeId: id,

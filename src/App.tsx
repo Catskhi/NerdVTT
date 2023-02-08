@@ -46,10 +46,6 @@ function App() {
     setNodes(storage.get(NODES))
   }
 
-  useEffect(() => {
-      console.log(storage.get(NODES))
-  }, [storage.get(NODES)])
-
   return (
     <Provider store={storage}>
     <div className='h-screen w-screen'>

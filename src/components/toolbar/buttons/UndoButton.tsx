@@ -1,4 +1,5 @@
-import { undoAction, verifyIfCanUndo } from "../../../StateManaging/history/HistoryManager";
+import { undo } from "../../../StateManaging/history/HistoryManager"
+
 
 interface UndoProps {
     updateNodesFunction : Function
@@ -6,12 +7,12 @@ interface UndoProps {
 
 export function UndoButton({updateNodesFunction} : UndoProps) {
 
-    function buttonAction() {
-        if (verifyIfCanUndo()) {
-            undoAction()
-            updateNodesFunction()
-        }
-    }
+    // function buttonAction() {
+    //     if (verifyIfCanUndo()) {
+    //         undoAction()
+    //         updateNodesFunction()
+    //     }
+    // }
 
     return (
         <button className='h-10 px-3
@@ -21,7 +22,7 @@ export function UndoButton({updateNodesFunction} : UndoProps) {
             active:bg-blue-700
             transition-all duration-300
         '
-        onClick={() => buttonAction()}
+        onClick={() => undo()}
         >
             <i className="bi bi-arrow-counterclockwise"></i>
         </button>
