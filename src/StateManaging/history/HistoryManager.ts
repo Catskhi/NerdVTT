@@ -1,10 +1,12 @@
 import { atom } from "jotai";
+import { sizeType } from "../../components/nodes/Square";
+import { NODES } from "../Atoms";
 
 import { storage, updateNodeSize } from "../NodeStorage";
 
 const numberOfUndos = atom(1)
 
-type historyAction = {
+export type historyAction = {
     usedFunction ?: 'Update Node Size',
     nodeId ?: string,
     keys ?: string[],
@@ -19,19 +21,17 @@ const undid = atom<boolean>(false)
 export function addHistoryNodeAction(historyAction : historyAction) : void {
     storage.set(HISTORY, (HISTORY) => [...HISTORY, historyAction])
     storage.sub(HISTORY, () => {
-        console.log('New history item added')
+        console.log('History changed')
     })
     if (!storage.get(undid)) {
         storage.set(currentIndexInHistory, (storage.get(HISTORY).length - 1))
-        console.log(storage.get(currentIndexInHistory), ' undid is false')
     } else {
-        remakeHistory(historyAction)
+        remakeHistory()
     }
     console.log(storage.get(HISTORY))
 }
 
-function remakeHistory(newHistoryAction : historyAction) : void {
-    console.log('Needs to make new history!')
+function remakeHistory() : void {
     const oldHistory = storage.get(HISTORY)
     let newHistory : historyAction[] = []
     oldHistory.map((historyElement) => {
@@ -40,13 +40,24 @@ function remakeHistory(newHistoryAction : historyAction) : void {
         } else if (historyElement === oldHistory[oldHistory.length - 1]) {
             historyElement.oldValue = newHistory[newHistory.length - 1].newValue
             newHistory.push(historyElement)
-            console.log('LAST ELEMENT')
         }
+        storage.get(currentIndexInHistory)
     })
+    // newHistory.push(oldHistory[oldHistory.length - 1])
     storage.set(HISTORY, newHistory)
     storage.set(undid, false)
     storage.set(currentIndexInHistory, (storage.get(HISTORY).length - 1))
-    console.log(storage.get(HISTORY), ' ', storage.get(currentIndexInHistory))
+}
+
+function getCurrentTimeline() : historyAction[] {
+    const mainHistory = storage.get(HISTORY)
+    let currentTimeline : historyAction[] = []
+    mainHistory.map((historyElement) => {
+        if (mainHistory.indexOf(historyElement) <= storage.get(currentIndexInHistory)) {
+            currentTimeline.push(historyElement)
+        }
+    })
+    return currentTimeline
 }
 
 function subtractIndexValue(steps : number) : void {
@@ -57,25 +68,52 @@ function addIndexValue(steps : number) : void {
     storage.set(currentIndexInHistory, storage.get(currentIndexInHistory) + steps)
 }
 
-function getCurrentElementInHistory() {
-    let currentElement = storage.get(HISTORY)[storage.get(currentIndexInHistory)]
-    console.log(storage.get(currentIndexInHistory))
-    console.log(currentElement)
+export function canRedo() : boolean {
+    if ((storage.get(currentIndexInHistory) + 1) < storage.get(HISTORY).length) {
+        return true
+    } else { 
+        return false
+    }
+}
+
+export function canUndo() : boolean {
+    if (storage.get(currentIndexInHistory) > 0) {
+        return true
+    } else {
+        return false
+    }
 }
 
 export function redo() {
-    if ((storage.get(currentIndexInHistory) + 1) < storage.get(HISTORY).length) {
+    if (canRedo()) {
         addIndexValue(1)
+        applyTimelineOnScreen(false)
     } else if ((storage.get(currentIndexInHistory) + 1) === storage.get(HISTORY).length) {
         storage.set(undid, false)
     }
-    getCurrentElementInHistory()
 }
 
 export function undo() {
-    if (storage.get(currentIndexInHistory) > 0) {
+    if (storage.get(HISTORY).length == 1) {
+        // TODO Get the old value and set to the token
+        storage.set(HISTORY, [])
+        storage.set(currentIndexInHistory, 0)
+        console.log(storage.get(HISTORY), ' ', storage.get(currentIndexInHistory))
+    } else if (canUndo()) {
         subtractIndexValue(1)
         storage.set(undid, true)
+        applyTimelineOnScreen(true)
     }
-    getCurrentElementInHistory()
+}
+
+function applyTimelineOnScreen(undo : boolean) {
+    const currentTimeline : historyAction[] = getCurrentTimeline()
+    let lastElementInTimeline = currentTimeline[currentTimeline.length - 1]
+    storage.get(NODES).map((node) => {
+        if (node.id === lastElementInTimeline.nodeId) {
+            if (lastElementInTimeline.usedFunction === 'Update Node Size') {
+                updateNodeSize(node.id, lastElementInTimeline.newValue?.height, lastElementInTimeline.newValue!.width)
+            }
+        }
+    })
 }

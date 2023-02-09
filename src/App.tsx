@@ -25,8 +25,6 @@ function App() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
 
-  const [testNodes, setTest] = useState(storage.get(NODES))
-
   function addNode () : void {
 
       updateNodesList({

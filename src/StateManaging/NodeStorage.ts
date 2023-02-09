@@ -1,7 +1,7 @@
 import { createStore } from "jotai";
 import { Node } from "reactflow";
 import { NODES } from "./Atoms";
-import { addHistoryNodeAction } from "./history/HistoryManager";
+import { addHistoryNodeAction, HISTORY, historyAction } from "./history/HistoryManager";
 
 export const storage = createStore()
 
