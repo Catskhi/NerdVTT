@@ -10,8 +10,8 @@ export type historyAction = {
     usedFunction ?: 'Update Node Size',
     nodeId ?: string,
     keys ?: string[],
-    oldValue : unknown,
-    newValue : unknown
+    oldValue : any,
+    newValue : any
 }
 
 export const HISTORY = atom<historyAction[]>([])
@@ -31,6 +31,25 @@ export function addHistoryNodeAction(historyAction : historyAction) : void {
     console.log(storage.get(HISTORY))
 }
 
+export function removeTimelineConflicts() {
+    const oldHistory = storage.get(HISTORY)
+    let newHistory : historyAction[] = []
+    oldHistory.map((historyItem) => {
+        const currentIndex = oldHistory.indexOf(historyItem)
+        let oldWidth : number = historyItem.newValue.width
+        let oldHeight : number = historyItem.newValue.height
+        if (currentIndex + 1 < oldHistory.length) {
+            if (oldWidth === oldHistory[currentIndex + 1].oldValue.width && oldHeight === oldHistory[currentIndex + 1].oldValue.height) {
+                newHistory.push(historyItem)
+            }
+        } else {
+            newHistory.push(historyItem)
+        }
+    })
+    storage.set(HISTORY, newHistory)
+    storage.set(undid, false)
+} 
+
 function remakeHistory() : void {
     const oldHistory = storage.get(HISTORY)
     let newHistory : historyAction[] = []
@@ -45,7 +64,6 @@ function remakeHistory() : void {
     })
     // newHistory.push(oldHistory[oldHistory.length - 1])
     storage.set(HISTORY, newHistory)
-    storage.set(undid, false)
     storage.set(currentIndexInHistory, (storage.get(HISTORY).length - 1))
 }
 
@@ -116,4 +134,5 @@ function applyTimelineOnScreen(undo : boolean) {
             }
         }
     })
+    removeTimelineConflicts()
 }

@@ -14,6 +14,7 @@ import { storage } from './StateManaging/NodeStorage';
 import { UndoButton } from './components/toolbar/buttons/UndoButton';
 import { useEffect, useState } from 'react';
 import { RedoButton } from './components/toolbar/buttons/RedoButton';
+import { removeTimelineConflicts } from './StateManaging/history/HistoryManager';
 
 const NODE_TYPES = {
   square : Square

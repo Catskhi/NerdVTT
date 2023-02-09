@@ -1,5 +1,5 @@
 
-import { canRedo, redo } from "../../../StateManaging/history/HistoryManager"
+import { canRedo, redo, removeTimelineConflicts } from "../../../StateManaging/history/HistoryManager"
 import { storage } from "../../../StateManaging/NodeStorage"
 
 interface RedoProps {

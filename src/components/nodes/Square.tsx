@@ -4,7 +4,7 @@ import { NodeProps, useStore, Dimensions, useReactFlow } from "reactflow";
 import '@reactflow/node-resizer/dist/style.css';
 import { useEffect, useState } from "react";
 import { updateNodeSize, updateNodePosition } from "../../StateManaging/NodeStorage";
-import { addHistoryNodeAction } from "../../StateManaging/history/HistoryManager";
+import { addHistoryNodeAction, removeTimelineConflicts } from "../../StateManaging/history/HistoryManager";
 
 export type sizeType = {
     height: number | string | null | undefined,

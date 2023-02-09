@@ -1,4 +1,4 @@
-import { canUndo, undo } from "../../../StateManaging/history/HistoryManager"
+import { canUndo, removeTimelineConflicts, undo } from "../../../StateManaging/history/HistoryManager"
 
 
 interface UndoProps {
